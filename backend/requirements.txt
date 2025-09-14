@@ -1,0 +1,4 @@
+flask
+facenet-pytorch
+opencv-python
+numpy
