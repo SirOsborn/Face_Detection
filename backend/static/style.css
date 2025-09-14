@@ -1,0 +1,129 @@
+/* Mirror the webcam video */
+#video {
+  transform: scaleX(-1);
+}
+/* style.css - Universal styling for the app with a modern, vibrant (Tant) color theme */
+:root {
+  --primary: #ff6f61;
+  --secondary: #f7cac9;
+  --accent: #92a8d1;
+  --background: #f4f4f4;
+  --text: #222;
+  --success: #4caf50;
+  --error: #e74c3c;
+  --card: #fff;
+  --border-radius: 16px;
+  --shadow: 0 4px 24px rgba(0,0,0,0.08);
+}
+
+body {
+  margin: 0;
+  font-family: 'Segoe UI', 'Roboto', Arial, sans-serif;
+  background: var(--background);
+  color: var(--text);
+  min-height: 100vh;
+}
+
+.container {
+  max-width: 600px;
+  margin: 32px auto;
+  background: var(--card);
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow);
+  padding: 32px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+h1, h2, h3 {
+  color: var(--primary);
+  margin-bottom: 8px;
+}
+
+label {
+  font-weight: 500;
+  margin-bottom: 6px;
+  color: var(--accent);
+}
+
+input, button, select {
+  font-size: 1rem;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid var(--accent);
+  margin-bottom: 12px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+input:focus, select:focus {
+  border-color: var(--primary);
+}
+
+button {
+  background: var(--primary);
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+  box-shadow: var(--shadow);
+  transition: background 0.2s;
+}
+
+button:hover {
+  background: var(--accent);
+}
+
+.card {
+  background: var(--card);
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow);
+  padding: 24px;
+  margin-bottom: 24px;
+}
+
+.success {
+  color: var(--success);
+  font-weight: 600;
+}
+
+.error {
+  color: var(--error);
+  font-weight: 600;
+}
+
+@media (max-width: 700px) {
+  .container {
+    max-width: 98vw;
+    padding: 16px 6px;
+  }
+}
+
+@media (max-width: 500px) {
+  h1, h2 {
+    font-size: 1.3rem;
+  }
+  .container {
+    padding: 8px 2px;
+  }
+}
+
+.camera-window {
+  width: 100%;
+  aspect-ratio: 16/9;
+  background: var(--secondary);
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  margin-bottom: 18px;
+}
+
+#video {
+  width: 100%;
+  height: auto;
+  border-radius: var(--border-radius);
+}
