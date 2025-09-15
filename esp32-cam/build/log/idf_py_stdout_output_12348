@@ -1,0 +1,21 @@
+Command: ninja size
+[0/1] C:\WINDOWS\system32\cmd.exe /C "cd /D C:\Users\PureGoat\Face_Detection\esp32-cam\build && C:\Users\PureGoat\.espressif\tools\cmake\3.30.2\bin\cmake.exe -D IDF_SIZE_TOOL=C:/Users/PureGoat/.espressif/python_env/idf5.5_py3.11_env/Scripts/python.exe;-m;esp_idf_size -D MAP_FILE=C:/Users/PureGoat/Face_Detection/esp32-cam/build/esp32-cam.map -D OUTPUT_JSON= -P C:/Users/PureGoat/esp/v5.5.1/esp-idf/tools/cmake/run_size_tool.cmake"
+                             Memory Type Usage Summary                              
++----------------------------------------------------------------------------------+
+| Memory Type/Section   | Used [bytes] | Used [%] | Remain [bytes] | Total [bytes] |
+|-----------------------+--------------+----------+----------------+---------------|
+| Flash Code            |        79114 |          |                |               |
+|    .text              |        79114 |          |                |               |
+| IRAM                  |        53167 |    40.56 |          77905 |        131072 |
+|    .text              |        52139 |    39.78 |                |               |
+|    .vectors           |         1028 |     0.78 |                |               |
+| Flash Data            |        39480 |          |                |               |
+|    .rodata            |        39224 |          |                |               |
+|    .appdesc           |          256 |          |                |               |
+| DRAM                  |        11424 |     6.32 |         169312 |        180736 |
+|    .data              |         9176 |     5.08 |                |               |
+|    .bss               |         2248 |     1.24 |                |               |
+| RTC SLOW              |           56 |     0.68 |           8136 |          8192 |
+|    .force_slow        |           32 |     0.39 |                |               |
+|    .rtc_slow_reserved |           24 |     0.29 |                |               |
++----------------------------------------------------------------------------------+

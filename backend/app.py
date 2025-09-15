@@ -140,13 +140,20 @@ def mark_attendance():
             writer.writerow([best_match[0], best_match[1]['name'], timestamp])
         return jsonify({
             'status': 'attendance_marked',
+            'recognized': True,
             'student_id': best_match[0],
             'name': best_match[1]['name'],
             'score': float(best_score),
-            'timestamp': timestamp
+            'timestamp': timestamp,
+            'message': f"Attendance marked for {best_match[1]['name']} ({best_match[0]})"
         })
     else:
-        return jsonify({'status': 'unknown', 'score': float(best_score)})
+        return jsonify({
+            'status': 'attendance_failed',
+            'recognized': False,
+            'score': float(best_score),
+            'message': 'Face not recognized. Attendance not marked.'
+        })
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)

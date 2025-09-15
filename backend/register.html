@@ -13,10 +13,12 @@
         <div class="camera-section">
             <div class="camera-window">
                 <video id="video" autoplay></video>
+                <canvas id="canvas" style="display:none;"></canvas>
             </div>
-            <button type="button" class="btn" id="snap">Take Photo</button>
-            <canvas id="canvas" style="display:none;"></canvas>
-            <img id="preview" style="display:none;"/>
+            <div style="display: flex; gap: 12px;">
+                <button type="button" class="btn" id="snap">Take Photo</button>
+                <button type="button" class="btn" id="retake" style="display:none;">Retake Photo</button>
+            </div>
         </div>
         <div class="form-section">
             <h2>Face Attendance System</h2>
@@ -38,7 +40,7 @@
             <form id="attForm" style="display:none;">
                 <button type="submit" class="btn" style="width:100%;">Scan Attendance</button>
             </form>
-            <div id="result"></div>
+            <div id="attendanceResult"></div>
         </div>
     </div>
     <script>
@@ -47,7 +49,7 @@
         const snap = document.getElementById('snap');
         const preview = document.getElementById('preview');
         const regForm = document.getElementById('regForm');
-        const result = document.getElementById('result');
+    const result = document.getElementById('attendanceResult');
         const modeRegister = document.getElementById('modeRegister');
         const modeAttendance = document.getElementById('modeAttendance');
         const regFields = document.getElementById('regFields');
@@ -73,20 +75,25 @@
         setupCamera();
 
         snap.onclick = function() {
+            // Show retake button after photo is taken
+            document.getElementById('retake').style.display = 'inline-block';
+        // Retake button logic
+        document.getElementById('retake').onclick = function() {
+            canvas.style.display = 'none';
+            video.style.display = 'block';
+            document.getElementById('retake').style.display = 'none';
+            result.innerText = '';
+        };
             if (loading) return;
             if (video.readyState === video.HAVE_ENOUGH_DATA) {
                 canvas.width = video.videoWidth || 480;
                 canvas.height = video.videoHeight || 320;
                 const ctx = canvas.getContext('2d');
-                ctx.save();
-                ctx.translate(canvas.width, 0);
-                ctx.scale(-1, 1);
+                // Draw the photo as-is (no mirroring in JS)
                 ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-                ctx.restore();
-                preview.src = canvas.toDataURL('image/jpeg');
-                preview.style.display = 'block';
-                preview.width = canvas.width;
-                preview.height = canvas.height;
+                // Hide video, show canvas with captured image
+                video.style.display = 'none';
+                canvas.style.display = 'block';
                 result.innerText = 'Photo captured.';
                 result.style.color = '#4caf50';
             } else {
@@ -117,7 +124,7 @@
                 result.style.color = '#e74c3c';
                 return;
             }
-            if (!preview.src) {
+            if (canvas.style.display !== 'block') {
                 result.innerText = 'Please take a photo first!';
                 result.style.color = '#e74c3c';
                 return;
@@ -126,19 +133,36 @@
             try {
                 const res = await fetch('/register', {
                     method: 'POST',
-                    body: createFormData(name, student_id, preview.src)
+                    body: createFormData(name, student_id)
                 });
                 const data = await res.json();
-                if (data.status === 'registered') {
-                    result.innerText = 'Registration successful!';
-                    result.style.color = '#4caf50';
+                let msg = '';
+                let color = '#e74c3c';
+                if (typeof data.message === 'string') {
+                    msg = data.message;
+                    color = '#4caf50';
+                } else if (typeof data.error === 'string') {
+                    msg = data.error;
+                    color = '#e74c3c';
+                } else if (typeof data.status === 'string') {
+                    msg = data.status;
+                    color = (data.status === 'registered') ? '#4caf50' : '#e74c3c';
                 } else {
-                    result.innerText = data.error || 'Registration failed.';
-                    result.style.color = '#e74c3c';
+                    msg = JSON.stringify(data);
+                    color = '#e74c3c';
                 }
+                result.innerHTML = msg;
+                result.className = '';
+                if (color === '#4caf50') {
+                    result.classList.add('success');
+                } else {
+                    result.classList.add('error');
+                }
+                result.style.display = 'block';
             } catch (err) {
-                result.innerText = 'Error: ' + err;
-                result.style.color = '#e74c3c';
+                result.innerHTML = 'Error: ' + err;
+                result.className = 'error';
+                result.style.display = 'block';
             }
             setLoading(false);
         };
@@ -146,7 +170,7 @@
         attForm.onsubmit = async function(e) {
             e.preventDefault();
             if (loading) return;
-            if (!preview.src) {
+            if (canvas.style.display !== 'block') {
                 result.innerText = 'Please take a photo first!';
                 result.style.color = '#e74c3c';
                 return;
@@ -155,22 +179,44 @@
             try {
                 const res = await fetch('/attendance', {
                     method: 'POST',
-                    body: createFormData('', '', preview.src)
+                    body: createFormData('', '')
                 });
-                const data = await res.json();
-                if (data.status === 'attendance_marked') {
-                    result.innerText = `Attendance marked for ${data.name} (${data.student_id}) at ${data.timestamp}`;
-                    result.style.color = '#4caf50';
-                } else if (data.status === 'unknown') {
-                    result.innerText = 'Face not recognized.';
-                    result.style.color = '#e74c3c';
-                } else {
-                    result.innerText = data.error || JSON.stringify(data);
-                    result.style.color = '#e74c3c';
+                let msg = '';
+                let color = '#e74c3c';
+                let data = null;
+                try {
+                    data = await res.json();
+                } catch (jsonErr) {
+                    msg = 'Attendance submitted, but no response from server.';
+                    color = '#e74c3c';
                 }
+                if (data) {
+                    if (typeof data.message === 'string') {
+                        msg = data.message;
+                        color = (typeof data.recognized !== 'undefined' && data.recognized) ? '#4caf50' : '#e74c3c';
+                    } else if (typeof data.error === 'string') {
+                        msg = data.error;
+                        color = '#e74c3c';
+                    } else if (typeof data.status === 'string') {
+                        msg = data.status;
+                        color = (data.status === 'attendance_marked') ? '#4caf50' : '#e74c3c';
+                    } else {
+                        msg = 'Unknown response: ' + JSON.stringify(data);
+                        color = '#e74c3c';
+                    }
+                }
+                result.innerHTML = msg || 'Attendance request sent.';
+                result.className = '';
+                if (color === '#4caf50') {
+                    result.classList.add('success');
+                } else {
+                    result.classList.add('error');
+                }
+                result.style.display = 'block';
             } catch (err) {
-                result.innerText = 'Error: ' + err;
-                result.style.color = '#e74c3c';
+                result.innerHTML = 'Error: ' + err;
+                result.className = 'error';
+                result.style.display = 'block';
             }
             setLoading(false);
         };
@@ -179,7 +225,19 @@
             const formData = new FormData();
             if (name) formData.append('name', name);
             if (student_id) formData.append('student_id', student_id);
-            if (dataUrl) {
+            // Always use mirrored canvas image data
+            if (canvas.style.display === 'block') {
+                // Create a temporary canvas to get mirrored image data
+                const tempCanvas = document.createElement('canvas');
+                tempCanvas.width = canvas.width;
+                tempCanvas.height = canvas.height;
+                const tempCtx = tempCanvas.getContext('2d');
+                tempCtx.save();
+                tempCtx.translate(tempCanvas.width, 0);
+                tempCtx.scale(-1, 1);
+                tempCtx.drawImage(canvas, 0, 0, tempCanvas.width, tempCanvas.height);
+                tempCtx.restore();
+                const dataUrl = tempCanvas.toDataURL('image/jpeg');
                 const byteString = atob(dataUrl.split(',')[1]);
                 const ab = new ArrayBuffer(byteString.length);
                 const ia = new Uint8Array(ab);

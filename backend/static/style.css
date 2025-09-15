@@ -1,6 +1,28 @@
-/* Mirror the webcam video */
-#video {
+/* Mirror and style webcam and captured photo */
+/* Feedback/result styling */
+#attendanceResult {
+  margin-top: 18px;
+  padding: 12px 0;
+  font-size: 1.15rem;
+  font-weight: 700;
+  min-height: 32px;
+  text-align: center;
+  border-radius: 10px;
+  background: #fff8f8;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  border: 2px solid #ff6f61;
+  color: #222;
+  z-index: 100;
+  position: relative;
+  display: block !important;
+}
+#video, #canvas {
+  width: 100%;
+  height: auto;
+  border-radius: var(--border-radius);
   transform: scaleX(-1);
+  display: block;
+  object-fit: cover;
 }
 /* style.css - Universal styling for the app with a modern, vibrant (Tant) color theme */
 :root {

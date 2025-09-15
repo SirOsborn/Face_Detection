@@ -1,0 +1,2 @@
+source C:/Users/PureGoat/Face_Detection/esp32-cam/build/bootloader/gdbinit/symbols
+source C:/Users/PureGoat/Face_Detection/esp32-cam/build/bootloader/gdbinit/connect
