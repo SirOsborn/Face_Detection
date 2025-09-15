@@ -1,4 +1,3 @@
-
 from flask import Flask, request, jsonify, send_from_directory
 import torch
 from facenet_pytorch import InceptionResnetV1
