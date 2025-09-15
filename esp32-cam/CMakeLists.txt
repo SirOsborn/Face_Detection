@@ -3,4 +3,6 @@
 cmake_minimum_required(VERSION 3.16)
 
 include($ENV{IDF_PATH}/tools/cmake/project.cmake)
+
+# Add esp32-camera component (update path if needed)
 project(esp32-cam)
