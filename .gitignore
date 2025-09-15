@@ -1,9 +1,26 @@
-.venv/
+# ESP32 build output
+esp32-cam/build/
 
-.vscode/
+# Python
+.venv/
 __pycache__/
 *.pyc
 
-.devcontainer/
+# VS Code and IDE
+.vscode/
 .idea/
-esp32-cam/build/
+.devcontainer/
+
+# Build and cache folders
+build/
+dist/
+.cache/
+.pytest_cache/
+
+# OS files
+Thumbs.db
+.DS_Store
+
+# Image files
+registered_students/
+attendance_records/
