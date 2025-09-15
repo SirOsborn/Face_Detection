@@ -1,18 +1,0 @@
-Command: ninja all
-[1/9] Performing build step for 'bootloader'
-[1/1] C:\WINDOWS\system32\cmd.exe /C "cd /D C:\Users\PureGoat\Face_Detection\esp32-cam\build\bootloader\esp-idf\esptool_py && C:\Users\PureGoat\.espressif\python_env\idf5.5_py3.11_env\Scripts\python.exe C:/Users/PureGoat/esp/v5.5.1/esp-idf/components/partition_table/check_sizes.py --offset 0x8000 bootloader 0x1000 C:/Users/PureGoat/Face_Detection/esp32-cam/build/bootloader/bootloader.bin"
-Bootloader binary size 0x6680 bytes. 0x980 bytes (8%) free.
-[2/9] No install step for 'bootloader'
-[3/9] Completed 'bootloader'
-[4/9] Building C object esp-idf/main/CMakeFiles/__idf_main.dir/esp32-cam.c.obj
-[5/9] Linking C static library esp-idf\main\libmain.a
-[6/9] Generating esp-idf/esp_system/ld/sections.ld
-[7/9] Linking CXX executable esp32-cam.elf
-[8/9] Generating binary image from built executable
-esptool.py v4.10.dev2
-Creating esp32 image...
-Merged 2 ELF sections
-Successfully created esp32 image.
-Generated C:/Users/PureGoat/Face_Detection/esp32-cam/build/esp32-cam.bin
-[9/9] C:\WINDOWS\system32\cmd.exe /C "cd /D C:\Users\PureGoat\Face_Detection\esp32-cam\build\esp-idf\esptool_py && C:\Users\PureGoat\.espressif\python_env\idf5.5_py3.11_env\Scripts\python.exe C:/Users/PureGoat/esp/v5.5.1/esp-idf/components/partition_table/check_sizes.py --offset 0x8000 partition --type app C:/Users/PureGoat/Face_Detection/esp32-cam/build/partition_table/partition-table.bin C:/Users/PureGoat/Face_Detection/esp32-cam/build/esp32-cam.bin"
-esp32-cam.bin binary size 0x2c360 bytes. Smallest app partition is 0x100000 bytes. 0xd3ca0 bytes (83%) free.
