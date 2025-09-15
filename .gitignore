@@ -1,7 +1,10 @@
 # ESP32 build output
-esp32-cam/build/
-esp32-cam/managed_components/
-esp32-cam/dependencies.lock
+camera/build/
+camera/managed_components/
+camera/components/
+camera/dependencies.lock
+camera/sdkconfig
+camera/sdkconfig.old
 
 # Python
 .venv/
